@@ -15,12 +15,15 @@ export class MathUtil {
   /**
    * Returns the hyperbolic sine of the number, defined as (exp(number) - exp(-number))/2
    * @see http://phpjs.org/functions/sinh
+   *
    * @example
+   * MathUtil.sinh(-0.9834330348825909);
+   * // returns: -1.1497971402636502
    *
    * @param {number} arg
    * @returns {number} the hyperbolic sine of the number, defined as (exp(number) - exp(-number))/2
    */
-  sinh(arg) {
+  static sinh(arg) {
     // Returns the hyperbolic sine of the number, defined as (exp(number) - exp(-number))/2
     //
     // version: 1004.2314

@@ -11,9 +11,9 @@
  */
 
 export class DSP {
-  constructor() {
-
-  }
+  // constructor() {
+  //
+  // }
   // ----------------------------------------
   // CONST (GETTER) @read only
   // ----------------------------------------
@@ -199,7 +199,7 @@ export class DSP {
     return buffers.map((buffer) => -1 * buffer);
   }
   static deInterleave(channel, buffers) {
-    switch(channel) {
+    switch (channel) {
       case DSP.LEFT: {
         return DSP.deInterleaveLeft(buffers);
       }
@@ -214,21 +214,21 @@ export class DSP {
       }
     }
   }
-  static deInterleaveLeft( buffers) {
+  static deInterleaveLeft(buffers) {
     const left = new Float64Array(buffers.length / 2);
     left.map((buffer, index) => buffers[2 * index]);
     return left;
   }
-  static deInterleaveRight( buffers) {
+  static deInterleaveRight(buffers) {
     const right = new Float64Array(buffers.length / 2);
     right.map((buffer, index) => buffers[2 * index + 1]);
     return right;
   }
-  static deInterleaveMix( buffers) {
+  static deInterleaveMix(buffers) {
     const mix = new Float64Array(buffers.length / 2);
     mix.map((buffer, index) => {
       const index2 = 2 * index;
-      return (buffers[index2] + buffers[index2 + 1]) / 2
+      return (buffers[index2] + buffers[index2 + 1]) / 2;
     });
     return mix;
   }
@@ -243,13 +243,14 @@ export class DSP {
    * @param {Array|*} sampleBuffer1 Array containing Float values or a Float64Array
    * @param {Array|*} sampleBuffer2 Array containing Float values or a Float64Array
    * @param {Boolean} negate When true inverts/flips the audio signal
-   * @param {Number} volumeCorrection When you add multiple sample buffers, use this to tame your signal ;)
+   * @param {Number} volumeCorrection When you add multiple sample buffers,
+   * <br>use this to tame your signal ;)
    * @returns {Float64Array} A new Float64Array interleaved buffer.
    */
   static mixSampleBuffers(sampleBuffer1, sampleBuffer2, negate, volumeCorrection) {
-    let outputSamples = new Float64Array(sampleBuffer1);
+    const outputSamples = new Float64Array(sampleBuffer1);
     outputSamples.map((buffer, index) => {
-      let sign = negate ? -1 : 1;
+      const sign = negate ? -1 : 1;
       return sign * sampleBuffer2[index] / volumeCorrection;
     });
     return outputSamples;

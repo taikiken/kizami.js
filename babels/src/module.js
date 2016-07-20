@@ -10,4 +10,41 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
+// use strict は本来不要でエラーになる
+// 無いと webpack.optimize.UglifyJsPlugin がコメントを全部削除するので記述する
+/* eslint strict: [0, "global"] */
 'use strict';
+
+import { MathUtil } from './util/MathUtil';
+
+
+import { DSP } from './dsp/DSP';
+import { Biquad } from './dsp/Biquad';
+import { DFT } from './dsp/DFT';
+import { FFT } from './dsp/FFT';
+
+const KIZAMI = {};
+
+/**
+ * version number を取得します
+ * @return {string} version number を返します
+ */
+KIZAMI.version = () => '@@version';
+/**
+ * build 日時を取得します
+ * @return {string}  build 日時を返します
+ */
+KIZAMI.build = () => '@@buildTime';
+
+KIZAMI.util = {
+  MathUtil,
+};
+
+KIZAMI.dsp = {
+  DSP,
+  Biquad,
+  DFT,
+  FFT,
+};
+
+window.KIZAMI = KIZAMI;

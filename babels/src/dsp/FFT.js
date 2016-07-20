@@ -41,8 +41,8 @@ export class FFT extends FourierTransform {
     // @type {number}
     let bit = bufferSize >> 1;
 
-    while(limit < bufferSize) {
-      for(let i = 0; i < limit; i = (i + 1) | 0) {
+    while (limit < bufferSize) {
+      for (let i = 0; i < limit; i = (i + 1) | 0) {
         reverseTable[i + limit] = reverseTable[i] + bit;
       }
 
@@ -63,7 +63,7 @@ export class FFT extends FourierTransform {
       reverseTable,
       sinTable,
       cosTable,
-    })
+    });
   }
   /**
    * Performs a forward transform on the sample buffer.
@@ -78,10 +78,15 @@ export class FFT extends FourierTransform {
 
     const k = Math.floor(Math.log(bufferSize) / Math.LN2);
     if (Math.pow(2, k) !== bufferSize) {
-      throw new Error(`Invalid buffer size, must be a power of 2. ${k}, ${Math.pow(2, k)}, ${bufferSize}`);
+      throw new Error(
+        `Invalid buffer size, must be a power of 2. ${k}, ${Math.pow(2, k)}, ${bufferSize}`
+      );
     }
     if (bufferSize !== buffers.length) {
-      throw new Error(`Supplied buffer is not the same size as defined FFT. FFT Size: ${bufferSize}. Buffer Size: ${buffers.length}`);
+      throw new Error(
+        `Supplied buffer is not the same size as defined FFT. FFT Size: ${bufferSize}.` +
+        `Buffer Size: ${buffers.length}`
+      );
     }
 
     // @type {Float64Array}
@@ -95,24 +100,24 @@ export class FFT extends FourierTransform {
     // @type {Float64Array}
     const reverseTable = this.reverseTable;
 
-    for(let i = 0; i < bufferSize; i = (i + 1) | 0) {
+    for (let i = 0; i < bufferSize; i = (i + 1) | 0) {
       real[i] = buffers[reverseTable[i]];
       imag[i] = 0;
     }
 
     let halfSize = 1;
-    while(halfSize < bufferSize) {
+    while (halfSize < bufferSize) {
       const phaseShiftStepReal = cosTable[halfSize];
       const phaseShiftStepImag = sinTable[halfSize];
 
       let currentPhaseShiftReal = 1;
       let currentPhaseShiftImag = 0;
 
-      for(let fftStep = 0; fftStep < halfSize; fftStep = (fftStep + 1) | 0) {
+      for (let fftStep = 0; fftStep < halfSize; fftStep = (fftStep + 1) | 0) {
         // @type {number}
         let index = fftStep;
 
-        while(index < bufferSize) {
+        while (index < bufferSize) {
           const off = index + halfSize;
           const tr = (currentPhaseShiftReal * real[off]) - (currentPhaseShiftImag * imag[off]);
           const ti = (currentPhaseShiftReal * imag[off]) + (currentPhaseShiftImag * real[off]);
@@ -126,8 +131,11 @@ export class FFT extends FourierTransform {
         }// while
 
         const tmpReal = currentPhaseShiftReal;
-        currentPhaseShiftReal = (tmpReal * phaseShiftStepReal) - (currentPhaseShiftImag * phaseShiftStepImag);
-        currentPhaseShiftImag = (tmpReal * phaseShiftStepImag) + (currentPhaseShiftImag * phaseShiftStepReal);
+        currentPhaseShiftReal = (tmpReal * phaseShiftStepReal) -
+          (currentPhaseShiftImag * phaseShiftStepImag);
+
+        currentPhaseShiftImag = (tmpReal * phaseShiftStepImag) +
+          (currentPhaseShiftImag * phaseShiftStepReal);
       }// for
 
       halfSize = halfSize << 1;
@@ -153,7 +161,7 @@ export class FFT extends FourierTransform {
     // // @type {Float64Array}
     // const spectrum = this.spectrum;
 
-    for(let i = 0; i < bufferSize; i = (i + 1) | 0) {
+    for (let i = 0; i < bufferSize; i = (i + 1) | 0) {
       imag[i] *= -1;
     }
 
@@ -179,11 +187,11 @@ export class FFT extends FourierTransform {
       let currentPhaseShiftReal = 1;
       let currentPhaseShiftImag = 0;
 
-      for(let fftStep = 0; fftStep < halfSize; fftStep = (fftStep + 1) | 0) {
+      for (let fftStep = 0; fftStep < halfSize; fftStep = (fftStep + 1) | 0) {
         // @type {number}
         let index = fftStep;
 
-        while(index < bufferSize) {
+        while (index < bufferSize) {
           const off = index + halfSize;
           const tr = (currentPhaseShiftReal * real[off]) - (currentPhaseShiftImag * imag[off]);
           const ti = (currentPhaseShiftReal * imag[off]) + (currentPhaseShiftImag * real[off]);
@@ -197,8 +205,10 @@ export class FFT extends FourierTransform {
         }// while
 
         const tmpReal = currentPhaseShiftReal;
-        currentPhaseShiftReal = (tmpReal * phaseShiftStepReal) - (currentPhaseShiftImag * phaseShiftStepImag);
-        currentPhaseShiftImag = (tmpReal * phaseShiftStepImag) + (currentPhaseShiftImag * phaseShiftStepReal);
+        currentPhaseShiftReal = (tmpReal * phaseShiftStepReal) -
+          (currentPhaseShiftImag * phaseShiftStepImag);
+        currentPhaseShiftImag = (tmpReal * phaseShiftStepImag) +
+          (currentPhaseShiftImag * phaseShiftStepReal);
       }// for
 
       halfSize = halfSize << 1;

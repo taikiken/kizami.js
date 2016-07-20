@@ -11,6 +11,8 @@
  * This notice shall be included in all copies or substantial portions of the Software.
  */
 
+import { MathUtil } from '../util/MathUtil';
+
 const typeSymbol = Symbol();
 /**
  * Biquad filter
@@ -95,7 +97,7 @@ export class Biquad {
       sampleRate,
       // l
       x1l,
-      x2l,2,
+      x2l,
       y1l,
       y2l,
       // r
@@ -122,7 +124,7 @@ export class Biquad {
       q,
       bw,
       s,
-    })
+    });
   }
   // ----------------------------------------
   // CONST
@@ -322,14 +324,14 @@ export class Biquad {
    */
   peaking(type) {
     // for peaking and shelving EQ filters only
-    switch(type) {
+    switch (type) {
       case Biquad.PEAKING_EQ:
       case Biquad.LOW_SHELF:
       case Biquad.HIGH_SHELF: {
         return Math.pow(10, this.dBgain / 40);
       }
       default: {
-        return Math.sqrt(Math.pow(10, this.dBgain / 20))
+        return Math.sqrt(Math.pow(10, this.dBgain / 20));
       }
     }
   }
@@ -342,15 +344,15 @@ export class Biquad {
     const w0 = Biquad.TWO_PI * this.f0 / this.sampleRate;
     const cosW0 = Math.cos(w0);
     const sinW0 = Math.sin(w0);
-    let results = [cosW0, sinW0];
+    const results = [cosW0, sinW0];
 
-    switch(this.parameterType) {
+    switch (this.parameterType) {
       case Biquad.Q: {
         results.push(sinW0 / 2 * this.q);
         break;
       }
       case Biquad.BW: {
-        results.push(sinW0 * sinh(Math.LN2 / 2 * this.bw * w0 / sinW0));
+        results.push(sinW0 * MathUtil.sinh(Math.LN2 / 2 * this.bw * w0 / sinW0));
         break;
       }
       case Biquad.S: {
@@ -381,7 +383,7 @@ export class Biquad {
    */
   coeff(cosW0, sinW0, alpha, answer) {
     // return [b0, b1, b2, a0, a1, a2]
-    switch(this.type) {
+    switch (this.type) {
       case Biquad.LPF: {
         const oneMinusCosW0 = 1 - cosW0;
         return [
@@ -458,7 +460,7 @@ export class Biquad {
       case Biquad.LOW_SHELF: {
         const coeff = sinW0 * Math.sqrt((answer ^ 2 + 1) * (1 / this.s - 1) + 2 * answer);
         const aPlusOne = answer + 1;
-        const aMinusOne = answer  - 1;
+        const aMinusOne = answer - 1;
         return [
           answer * (aPlusOne - aMinusOne * cosW0 + coeff),
           answer * (aMinusOne - aPlusOne * cosW0),
@@ -472,7 +474,7 @@ export class Biquad {
       case Biquad.HIGH_SHELF: {
         const coeff = sinW0 * Math.sqrt((answer ^ 2 + 1) * (1 / this.s - 1) + 2 * answer);
         const aPlusOne = answer + 1;
-        const aMinusOne = answer  - 1;
+        const aMinusOne = answer - 1;
         return [
           answer * (aPlusOne + aMinusOne * cosW0 + coeff),
           -2 * answer * (aMinusOne + aPlusOne * cosW0),
@@ -482,16 +484,19 @@ export class Biquad {
           aPlusOne - aMinusOne * cosW0 - coeff,
         ];
       }
+      default: {
+        throw new Error(`illegal type: ${this.type}`);
+      }
     }
   }
 
-  process(buffers) {
-    const output = new Float64Array(buffers.length);
-    // output.map((buffer, index) => {
-    //
-    // });
-  }
-  processStereo(buffer) {
-
-  }
+  // process(buffers) {
+  //   const output = new Float64Array(buffers.length);
+  //   // output.map((buffer, index) => {
+  //   //
+  //   // });
+  // }
+  // processStereo(buffer) {
+  //
+  // }
 }

@@ -45,7 +45,7 @@ export class DFT extends FourierTransform {
     Object.assign(this, {
       sinTable,
       cosTable,
-    })
+    });
   }
   /**
    * Performs a forward transform on the sample buffer.
