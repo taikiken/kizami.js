@@ -187,7 +187,6 @@ export class DSP {
     return Math.PI * 2;
   }
 
-
   // ----------------------------------------
   // METHOD STATIC
   // ----------------------------------------
@@ -199,7 +198,43 @@ export class DSP {
   static invert(buffers) {
     return buffers.map((buffer) => -1 * buffer);
   }
-
+  static deInterleave(channel, buffers) {
+    switch(channel) {
+      case DSP.LEFT: {
+        return DSP.deInterleaveLeft(buffers);
+      }
+      case DSP.RIGHT: {
+        return DSP.deInterleaveRight(buffers);
+      }
+      case DSP.MIX: {
+        return DSP.deInterleaveMix(buffers);
+      }
+      default: {
+        throw new Error(`illegal channel number: ${channel}`);
+      }
+    }
+  }
+  static deInterleaveLeft( buffers) {
+    const left = new Float64Array(buffers.length / 2);
+    left.map((buffer, index) => buffers[2 * index]);
+    return left;
+  }
+  static deInterleaveRight( buffers) {
+    const right = new Float64Array(buffers.length / 2);
+    right.map((buffer, index) => buffers[2 * index + 1]);
+    return right;
+  }
+  static deInterleaveMix( buffers) {
+    const mix = new Float64Array(buffers.length / 2);
+    mix.map((buffer, index) => {
+      const index2 = 2 * index;
+      return (buffers[index2] + buffers[index2 + 1]) / 2
+    });
+    return mix;
+  }
+  static getChannel(channel, buffers) {
+    return DSP.deInterleave(channel, buffers);
+  }
   /**
    * Helper method (for Reverb) to mix two (interleaved) sample buffers. It's possible
    * to negate the second buffer while mixing and to perform a volume correction
@@ -218,6 +253,28 @@ export class DSP {
       return sign * sampleBuffer2[index] / volumeCorrection;
     });
     return outputSamples;
+  }
+  /**
+   * Find RMS of signal
+   * @param {Array|Float64Array|*} buffers
+   * @returns {number} RMS of signal
+   */
+  static rms(buffers) {
+    const sum = buffers.reduce((total, buffer) => total + (buffer * buffer), 0);
+    return Math.sqrt(sum / buffers.length);
+  }
+  /**
+   * Find Peak of signal
+   * @param buffers
+   * @returns {number} Find Peak of signal
+   */
+  static peak(buffers) {
+    let peak = 0;
+    buffers.forEach((buffer) => {
+      const abs = Math.abs(buffer);
+      peak = abs > peak ? abs : peak;
+    });
+    return peak;
   }
 }
 
