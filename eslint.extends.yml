@@ -1,0 +1,36 @@
+extends:
+  - "eslint:recommended"
+  # https://github.com/airbnb/javascript
+  # https://github.com/airbnb/javascript/blob/master/react
+  # eslint: recommend + airbnb JavaScript type guide
+  - "airbnb"
+rules:
+  # http://eslint.org/docs/rules/indent
+  # space 2
+  indent:
+    - 2
+    - 2
+    - SwitchCase: 1
+#  # http://eslint.org/docs/rules/comma-dangle
+#  # Object 最後にカンマを(,)付けない, 複数行の時は付ける
+#  # bad
+#  # { a: 1, }
+#  comma-dangle:
+#    - 2
+#    - always-multiline
+  # http://eslint.org/docs/rules/require-jsdoc
+  # JSDoc 必須
+  require-jsdoc:
+    - 1
+    - require: {
+        FunctionDeclaration: true,
+        MethodDefinition: true,
+        ClassDeclaration: true,
+      }
+  # http://eslint.org/docs/rules/no-console
+  # console.warn, console.error は許可
+  no-console:
+    - 1
+    - allow:
+      - warn
+      - error

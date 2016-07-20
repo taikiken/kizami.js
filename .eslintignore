@@ -1,0 +1,12 @@
+# bundle
+*.bundle.js
+
+# compile
+babels/compile
+
+# app/**/libs
+app/assets/js/libs
+app/assets/js/bundle
+
+# test
+test
