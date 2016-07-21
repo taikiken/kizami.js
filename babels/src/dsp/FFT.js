@@ -174,8 +174,8 @@ export class FFT extends FourierTransform {
       revImag[index] = imag[reverseTable[index]];
     });
 
-    real = revReal;
-    imag = revImag;
+    this.real = revReal;
+    this.imag = revImag;
 
     let halfSize = 1;
     while (halfSize < bufferSize) {
