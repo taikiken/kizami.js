@@ -9,7 +9,9 @@
  *
  * This notice shall be included in all copies or substantial portions of the Software.
  */
-
+/**
+ * DSP is an object which contains general purpose utility functions and constants
+ */
 export class DSP {
   // constructor() {
   //
@@ -198,6 +200,12 @@ export class DSP {
   static invert(buffers) {
     return buffers.map((buffer) => -1 * buffer);
   }
+  /**
+   * interleave させます
+   * @param {number} channel DSP.LEFT | DSP.RIGHT | DSP.MIX
+   * @param {Float64Array|Array|*} buffers A sample buffer
+   * @returns {Float64Array|Array} The de interleave sample buffer
+   */
   static deInterleave(channel, buffers) {
     switch (channel) {
       case DSP.LEFT: {
@@ -214,16 +222,31 @@ export class DSP {
       }
     }
   }
+  /**
+   *
+   * @param {Array|Float64Array|*} buffers A sample buffer
+   * @returns {Float64Array}
+   */
   static deInterleaveLeft(buffers) {
     const left = new Float64Array(buffers.length / 2);
     left.map((buffer, index) => buffers[2 * index]);
     return left;
   }
+  /**
+   *
+   * @param {Array|Float64Array|*} buffers A sample buffer
+   * @returns {Float64Array}
+   */
   static deInterleaveRight(buffers) {
     const right = new Float64Array(buffers.length / 2);
     right.map((buffer, index) => buffers[2 * index + 1]);
     return right;
   }
+  /**
+   *
+   * @param {Array|Float64Array|*} buffers A sample buffer
+   * @returns {Float64Array}
+   */
   static deInterleaveMix(buffers) {
     const mix = new Float64Array(buffers.length / 2);
     mix.map((buffer, index) => {
@@ -232,6 +255,12 @@ export class DSP {
     });
     return mix;
   }
+  /**
+   * deInterleave alias
+   * @param {number} channel DSP.LEFT | DSP.RIGHT | DSP.MIX
+   * @param {Float64Array|Array|*} buffers A sample buffer
+   * @returns {Float64Array|Array} The de interleave sample buffer
+   */
   static getChannel(channel, buffers) {
     return DSP.deInterleave(channel, buffers);
   }
@@ -257,7 +286,7 @@ export class DSP {
   }
   /**
    * Find RMS of signal
-   * @param {Array|Float64Array|*} buffers
+   * @param {Array|Float64Array|*} buffers A sample buffer
    * @returns {number} RMS of signal
    */
   static rms(buffers) {
@@ -266,7 +295,7 @@ export class DSP {
   }
   /**
    * Find Peak of signal
-   * @param buffers
+   * @param {Array|Float64Array|*} buffers A sample buffer
    * @returns {number} Find Peak of signal
    */
   static peak(buffers) {

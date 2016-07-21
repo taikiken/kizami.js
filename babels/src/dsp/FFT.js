@@ -161,8 +161,11 @@ export class FFT extends FourierTransform {
     // // @type {Float64Array}
     // const spectrum = this.spectrum;
 
+    let imagArg = imag;
+    let realArg = real;
+
     for (let i = 0; i < bufferSize; i = (i + 1) | 0) {
-      imag[i] *= -1;
+      imagArg[i] *= -1;
     }
 
     // @type {Float64Array}
@@ -174,8 +177,8 @@ export class FFT extends FourierTransform {
       revImag[index] = imag[reverseTable[index]];
     });
 
-    this.real = revReal;
-    this.imag = revImag;
+    realArg = revReal;
+    imagArg = revImag;
 
     let halfSize = 1;
     while (halfSize < bufferSize) {
@@ -193,13 +196,15 @@ export class FFT extends FourierTransform {
 
         while (index < bufferSize) {
           const off = index + halfSize;
-          const tr = (currentPhaseShiftReal * real[off]) - (currentPhaseShiftImag * imag[off]);
-          const ti = (currentPhaseShiftReal * imag[off]) + (currentPhaseShiftImag * real[off]);
+          const tr = (currentPhaseShiftReal * realArg[off]) -
+            (currentPhaseShiftImag * imagArg[off]);
+          const ti = (currentPhaseShiftReal * imagArg[off]) +
+            (currentPhaseShiftImag * realArg[off]);
 
-          real[off] = real[index] - tr;
-          imag[off] = imag[index] - ti;
-          real[index] += tr;
-          imag[index] += ti;
+          realArg[off] = realArg[index] - tr;
+          imagArg[off] = imagArg[index] - ti;
+          realArg[index] += tr;
+          imagArg[index] += ti;
 
           index += halfSize << 1;
         }// while
@@ -216,7 +221,7 @@ export class FFT extends FourierTransform {
 
     // this should be reused instead
     const buffers = new Float64Array(bufferSize);
-    buffers.map((buffer, index) => real[index] / bufferSize);
+    buffers.map((buffer, index) => realArg[index] / bufferSize);
 
     return buffers;
   }

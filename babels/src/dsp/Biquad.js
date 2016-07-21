@@ -88,6 +88,11 @@ export class Biquad {
     // fixed f0/Fs and dBgain.
     const s = 1;
 
+    /**
+     * 引数の type 属性を保存します
+     * @private
+     * @type {number}
+     */
     this[typeSymbol] = type;
 
     // make property
@@ -263,33 +268,61 @@ export class Biquad {
       ],
     };
   }
+  /**
+   * filter type を設定します
+   * @param {number} type filter type
+   */
   setFilterType(type) {
     this.type = type;
     this.recalculateCoefficients(this[typeSymbol]);
   }
+  /**
+   * sample rate を設定します
+   * @param {number} rate sample rate
+   */
   setSampleRate(rate) {
     this.sampleRate = rate;
     this.recalculateCoefficients(this[typeSymbol]);
   }
+  /**
+   * Q parameter type property を設定します
+   * @param {number} q parameter type
+   */
   setQ(q) {
     this.parameterType = Biquad.Q;
     this.q = Math.max(Math.min(q, 115.0), 0.001);
     this.recalculateCoefficients(this[typeSymbol]);
   }
+  /**
+   * BW parameter type property を設定します
+   * @param {number} bw BW parameter type
+   */
   setBW(bw) {
     this.parameterType = Biquad.BW;
     this.bw = bw;
     this.recalculateCoefficients(this[typeSymbol]);
   }
+  /**
+   * S parameter type property を設定します
+   * @param {number} s S parameter type
+   */
   setS(s) {
     this.parameterType = Biquad.S;
     this.s = Math.max(Math.min(s, 5.0), 0.0001);
     this.recalculateCoefficients(this[typeSymbol]);
   }
+  /**
+   * F0 property を設定します
+   * @param freq F0 property
+   */
   setF0(freq) {
     this.f0 = freq;
     this.recalculateCoefficients(this[typeSymbol]);
   }
+  /**
+   * dBgain property を設定します
+   * @param {number} gain dBgain
+   */
   setDbGain(gain) {
     this.dBgain = gain;
     this.recalculateCoefficients(this[typeSymbol]);
@@ -316,7 +349,6 @@ export class Biquad {
     this.a1a0 = a1 / a0;
     this.a2a0 = a2 / a0;
   }
-
   /**
    * for peaking and shelving EQ filters only
    * @param {number} type
@@ -336,8 +368,8 @@ export class Biquad {
     }
   }
   /**
-   *
-   * @param {number} answer
+   * alpha を基に cosW0, sinW0 を計算します
+   * @param {number} answer 計算基礎
    * @returns {*[]} cosW0, sinW0, alpha
    */
   alpha(answer) {
@@ -366,7 +398,6 @@ export class Biquad {
     }
     return results;
   }
-
   /**
    * FYI: The relationship between bandwidth and Q is
    * 1/Q = 2*sinh(ln(2)/2*BW*w0/sin(w0))     (digital filter w BLT)
@@ -490,13 +521,13 @@ export class Biquad {
     }
   }
 
-  // process(buffers) {
-  //   const output = new Float64Array(buffers.length);
-  //   // output.map((buffer, index) => {
-  //   //
-  //   // });
-  // }
-  // processStereo(buffer) {
-  //
-  // }
+  process(buffers) {
+    const output = new Float64Array(buffers.length);
+    // output.map((buffer, index) => {
+    //
+    // });
+  }
+  processStereo(buffer) {
+
+  }
 }

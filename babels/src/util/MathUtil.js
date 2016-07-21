@@ -11,6 +11,9 @@
  * This notice shall be included in all copies or substantial portions of the Software.
  */
 
+/**
+ * 計算 Math 拡張
+ */
 export class MathUtil {
   /**
    * Returns the hyperbolic sine of the number, defined as (exp(number) - exp(-number))/2
@@ -20,7 +23,7 @@ export class MathUtil {
    * MathUtil.sinh(-0.9834330348825909);
    * // returns: -1.1497971402636502
    *
-   * @param {number} arg
+   * @param {number} arg 計算基礎
    * @returns {number} the hyperbolic sine of the number, defined as (exp(number) - exp(-number))/2
    */
   static sinh(arg) {

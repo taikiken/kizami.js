@@ -9,6 +9,11 @@
  * http://www.opensource.org/licenses/mit-license.html
  *
  * This notice shall be included in all copies or substantial portions of the Software.
+ *
+ * fork from DSP.js - a comprehensive digital signal processing  library for javascript
+ *
+ *  Created by Corban Brook <corbanbrook@gmail.com> on 2010-01-01.
+ *  Copyright 2010 Corban Brook. All rights reserved.
  */
 // use strict は本来不要でエラーになる
 // 無いと webpack.optimize.UglifyJsPlugin がコメントを全部削除するので記述する
