@@ -34,3 +34,7 @@ rules:
     - allow:
       - warn
       - error
+  # http://eslint.org/docs/rules/valid-jsdoc
+  # enforce valid JSDoc comments (valid-jsdoc)
+  valid-jsdoc:
+    - 1

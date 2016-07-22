@@ -10,8 +10,8 @@
  *
  */
 
-import { FourierTransform } from './FourierTransform';
-import { DSP } from './DSP';
+import { FourierTransform } from '../FourierTransform';
+import { DSP } from '../DSP';
 
 /**
  * calculating the Discrete Fourier Transform of a signal.

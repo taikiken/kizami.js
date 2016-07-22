@@ -520,14 +520,75 @@ export class Biquad {
       }
     }
   }
-
+  /**
+   *
+   *  y[n] = (b0/a0)*x[n] + (b1/a0)*x[n-1] + (b2/a0)*x[n-2] - (a1/a0)*y[n-1] - (a2/a0)*y[n-2]
+   *
+   * @param {Float64Array|Array} buffers
+   * @returns {Float64Array}
+   */
   process(buffers) {
     const output = new Float64Array(buffers.length);
-    // output.map((buffer, index) => {
-    //
-    // });
-  }
-  processStereo(buffer) {
+    // loop
+    buffers.forEach((buffer, index) => {
+      const calculated = this.b0a0 * buffer +
+        this.b1a0 * this.x1l +
+        this.b2a0 * this.x2l -
+        this.a1a0 * this.y1l -
+        this.a2a0 * this.y2l;
+      output[index] = calculated;
 
+      this.y2l = this.y1l;
+      this.y1l = calculated;
+      this.x2l = this.x1l;
+      this.x1l = buffer;
+    });
+
+    return output;
+  }
+  /**
+   *
+   *  y[n] = (b0/a0)*x[n] + (b1/a0)*x[n-1] + (b2/a0)*x[n-2] - (a1/a0)*y[n-1] - (a2/a0)*y[n-2]
+   *
+   * @param {Float64Array} buffers
+   * @returns {Float64Array}
+   */
+  processStereo(buffers) {
+    const output = new Float64Array(buffers.length);
+    // loop
+    for (let i = 0, limit = buffers.length / 2; i < limit; i = (i + 1) | 0) {
+      const iW = i * 2;
+      const iW1 = iW + 1;
+
+      // left
+      const left =
+        this.b0a0 * buffers[iW] +
+        this.b1a0 * this.x1l +
+        this.b2a0 * this.x2l -
+        this.a1a0 * this.y1l -
+        this.a2a0 * this.y2l;
+      output[iW] = left;
+
+      this.y2l = this.y1l;
+      this.y1l = left;
+      this.x2l = this.x1l;
+      this.x1l = buffers[iW];
+
+      // right
+      const right =
+        this.b0a0 * buffers[iW1] +
+        this.b1a0 * this.x1r +
+        this.b2a0 * this.x2r -
+        this.a1a0 * this.y1r -
+        this.a2a0 * this.y2r;
+      output[iW1] = right;
+
+      this.y2r = this.y1r;
+      this.y1r = right;
+      this.x2r = this.x1r;
+      this.x1r = buffers[iW1];
+    }
+
+    return output;
   }
 }

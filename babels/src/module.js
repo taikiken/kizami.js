@@ -25,8 +25,8 @@ import { MathUtil } from './util/MathUtil';
 
 import { DSP } from './dsp/DSP';
 import { Biquad } from './dsp/Biquad';
-import { DFT } from './dsp/DFT';
-import { FFT } from './dsp/FFT';
+import { DFT } from './dsp/fourier/DFT';
+import { FFT } from './dsp/fourier/FFT';
 
 const KIZAMI = {};
 

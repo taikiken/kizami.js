@@ -10,7 +10,7 @@
  *
  */
 
-import { FourierTransform } from './FourierTransform';
+import { FourierTransform } from '../FourierTransform';
 
 /**
  * calculating the Discrete Fourier Transform of a signal
@@ -170,6 +170,7 @@ export class FFT extends FourierTransform {
 
     // @type {Float64Array}
     const revReal = new Float64Array(bufferSize);
+
     // @type {Float64Array}
     const revImag = new Float64Array(bufferSize);
     revReal.forEach((val, index) => {
@@ -210,8 +211,10 @@ export class FFT extends FourierTransform {
         }// while
 
         const tmpReal = currentPhaseShiftReal;
+
         currentPhaseShiftReal = (tmpReal * phaseShiftStepReal) -
           (currentPhaseShiftImag * phaseShiftStepImag);
+
         currentPhaseShiftImag = (tmpReal * phaseShiftStepImag) +
           (currentPhaseShiftImag * phaseShiftStepReal);
       }// for
